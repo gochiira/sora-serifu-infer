@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<title>Sora Serifu Predict</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sora Serifu Predict</a>
+        </div>
+    </nav>
+</header>
+<main class="container is-centered">
+    <div class="row text-center justify-content-center">
+        <div class="col-10 mx-4 my-4 box">
+            <p>機械学習で 台詞からキャラクター名を自動的に求めるAPIです。</p>
+            <p>下記フォームを使うか、<a href="/docs">こちらのAPIドキュメント</a>をご参照の上ご利用ください。</p>
+        </div>
+        <div class="col-10 col-md-6 mx-4 my-4 box">
+            <label for="formFileLg" class="form-label">下記フォームに台詞を入力...</label>
+            <input type="text" class="form-control form-control-md" id="formSentence">
+        </div>
+        <div class="col-10 col-md-6 mx-4 my-4 box">
+            <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            onclick="uploadSentence()"
+            >文章からキャラクターを推定する</button>
+        </div>
+    </div>
+    <div class="row text-center">
+        <h4 id="predicted_difficulty"></h4>
+    </div>
+</main>
+<footer class="footer mt-4 py-3 bg-light fixed-bottom">
+    <div class="container text-center">
+        <p class="text-muted">&copy; 2022 Gochiira</p>
+        <p class="text-muted">Source: <a href="https://github.com/Gochiira/SoraSerifuPredict">Github</a></>
+    </div>
+</footer>
+</body>
+<script>
+async function uploadSentence() {
+    document.getElementById('predicted_character').innerText = "判定中...";
+    const resp = await fetch ('/predict', {
+        method: 'POST',
+        body: JSON.stringify({
+            sentence: document.getElementById('formSentence').value
+        })
+    });
+    const json = await resp.json();
+    const resp_text = `判定されたキャラクター: ${json.character}`;
+    document.getElementById('predicted_character').innerText = resp_text;
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</html>
