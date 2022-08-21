@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="row text-center">
-        <h4 id="predicted_difficulty"></h4>
+        <h4 id="predicted_character"></h4>
     </div>
 </main>
 <footer class="footer mt-4 py-3 bg-light fixed-bottom">
@@ -45,9 +45,16 @@
 </body>
 <script>
 async function uploadSentence() {
+    if (document.getElementById("formSentence").value == "") {
+        alert("台詞を入力してください。");
+        return;
+    }
     document.getElementById('predicted_character').innerText = "判定中...";
     const resp = await fetch ('/predict', {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             sentence: document.getElementById('formSentence').value
         })
